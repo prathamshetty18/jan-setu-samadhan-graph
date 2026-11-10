@@ -11,7 +11,7 @@ This guide provides step-by-step instructions for deploying the **Jan Setu – S
 |---|---|
 | **Database Engine** | PostgreSQL 15+ / 16 (Managed via Supabase) |
 | **Spatial Engine** | PostGIS extension (enabled in Supabase) |
-| **Python Driver** | `psycopg2-binary>=2.9.9` |
+| **Python Driver** | `psycopg[binary]>=3.1.18` (Psycopg 3) |
 | **ORM & Layer** | SQLAlchemy 2.0+ with declarative base mapping |
 | **Local Fallback** | SQLite (`samadhan_graph.db`) when `DATABASE_URL` is unset |
 | **Connection Pooling** | Pre-ping enabled, connection recycling at 1800s for PgBouncer/Supavisor |
@@ -120,3 +120,4 @@ Before pointing production traffic to Supabase:
 - [ ] Backend health probe returns `{"status": "healthy"}` at `/api/health`.
 - [ ] Test complaint registration in English, Kannada, and Hindi via `/api/complaints`.
 - [ ] Confirm no database credentials or secrets are present in Git repository.
+

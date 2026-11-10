@@ -10,9 +10,14 @@ DEFAULT_DB_FILE = os.path.join(BACKEND_DIR, "samadhan_graph.db").replace("\\", "
 # Load database URL from environment variable, falling back to local SQLite
 DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{DEFAULT_DB_FILE}").strip()
 
-# Normalize postgres:// to postgresql:// for SQLAlchemy 2.0 (e.g. Supabase, Render, Heroku)
+# Normalize PostgreSQL connection schemes to use modern Psycopg 3 (psycopg[binary]) consistently
+# Handles postgres://, postgresql://, and postgresql+psycopg2:// from Render, Supabase, Heroku, Docker
 if DATABASE_URL.startswith("postgres://"):
-    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+    DATABASE_URL = "postgresql+psycopg://" + DATABASE_URL[len("postgres://"):]
+elif DATABASE_URL.startswith("postgresql://"):
+    DATABASE_URL = "postgresql+psycopg://" + DATABASE_URL[len("postgresql://"):]
+elif DATABASE_URL.startswith("postgresql+psycopg2://"):
+    DATABASE_URL = "postgresql+psycopg://" + DATABASE_URL[len("postgresql+psycopg2://"):]
 
 # Configure engine arguments based on dialect
 engine_kwargs = {
