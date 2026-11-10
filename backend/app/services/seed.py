@@ -6,22 +6,31 @@ from app.models.models import (
 )
 from app.services.nlp.processor import nlp_engine
 
-def seed_database(db: Session):
+def seed_database(db: Session, clear_existing: bool = True):
     """
     Seeds comprehensive municipal reference data and at least 23 multilingual
     synthetic complaints in English, Hindi, and Kannada, complete with
     departments, jurisdiction rules, incidents, officer actions, and recurrence alerts.
+
+    If clear_existing is False, checks if records already exist to prevent duplicate records
+    and ensure production complaint records are never accidentally deleted.
     """
-    # 1. Clear existing data
-    db.query(AuditLog).delete()
-    db.query(ResolutionEvidence).delete()
-    db.query(RecordedAction).delete()
-    db.query(Complaint).delete()
-    db.query(Incident).delete()
-    db.query(JurisdictionRule).delete()
-    db.query(Ward).delete()
-    db.query(Department).delete()
-    db.commit()
+    if clear_existing:
+        # 1. Clear existing data (for explicit demo reset)
+        db.query(AuditLog).delete()
+        db.query(ResolutionEvidence).delete()
+        db.query(RecordedAction).delete()
+        db.query(Complaint).delete()
+        db.query(Incident).delete()
+        db.query(JurisdictionRule).delete()
+        db.query(Ward).delete()
+        db.query(Department).delete()
+        db.commit()
+    else:
+        # Safe non-destructive check: if complaints exist, skip to prevent duplicate records
+        existing_count = db.query(Complaint).count()
+        if existing_count > 0:
+            return
 
     # 2. Seed Departments
     depts = [

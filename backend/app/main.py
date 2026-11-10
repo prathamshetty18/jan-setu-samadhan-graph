@@ -17,19 +17,25 @@ from app.api.admin import router as admin_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: ensure tables exist and demo data is loaded
+    # Startup: safely initialize schema / PostGIS
     init_db()
-    db = SessionLocal()
-    try:
-        count = db.query(Complaint).count()
-        if count == 0:
-            print("Database empty. Seeding initial Jan Setu demo data...")
-            seed_database(db)
-            print("Seeding complete.")
-    except Exception as e:
-        print("Startup warning:", e)
-    finally:
-        db.close()
+    
+    # Auto-seed demo data only if database is empty and AUTO_SEED_DEMO_DATA is enabled
+    auto_seed = os.getenv("AUTO_SEED_DEMO_DATA", "true").lower() in ("true", "1", "yes")
+    if auto_seed:
+        db = SessionLocal()
+        try:
+            count = db.query(Complaint).count()
+            if count == 0:
+                print("Database is empty. Seeding initial Jan Setu demo reference data...")
+                seed_database(db, clear_existing=False)
+                print("Seeding complete.")
+            else:
+                print(f"Database contains {count} existing records. Preserving data without overwriting.")
+        except Exception as e:
+            print("Startup database check notice:", e)
+        finally:
+            db.close()
     yield
     # Shutdown
 
