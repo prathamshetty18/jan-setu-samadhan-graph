@@ -143,20 +143,24 @@ class MultilingualNLPEngine:
         text_lower = text.lower()
         vector = [0.0] * 64
 
-        # Concept dimension activations (first 36 dims)
-        dim_idx = 0
-        for category, lang_dict in CIVIC_CONCEPTS.items():
+        # Language-invariant Civic Concept Anchors (first 36 dims)
+        # Groups keywords across English, Hindi, and Kannada into shared semantic slots
+        cat_keys = list(CIVIC_CONCEPTS.keys())
+        for cat_idx, cat in enumerate(cat_keys):
+            lang_dict = CIVIC_CONCEPTS[cat]
             for kw_lang, kw_list in lang_dict.items():
-                for kw in kw_list:
+                for kw_idx, kw in enumerate(kw_list):
                     if kw.lower() in text_lower:
-                        vector[dim_idx % 36] += 2.0
-                dim_idx += 1
+                        # Shared category anchor
+                        vector[cat_idx * 4] += 4.0
+                        # Sub-concept slot
+                        vector[cat_idx * 4 + 1 + (kw_idx % 3)] += 1.5
 
-        # Text length & character n-gram hash features (remaining 28 dims)
-        for i in range(len(text_lower) - 2):
+        # Character n-gram hash features (remaining 28 dims)
+        for i in range(max(0, len(text_lower) - 2)):
             trigram = text_lower[i:i+3]
             h = abs(hash(trigram)) % 28
-            vector[36 + h] += 0.5
+            vector[36 + h] += 0.2
 
         # L2 Normalization
         norm = math.sqrt(sum(v * v for v in vector))

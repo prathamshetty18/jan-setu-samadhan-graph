@@ -1,0 +1,340 @@
+import {
+  ComplaintDetail,
+  ComplaintListItem,
+  DashboardSummary,
+  CategoryAnalytics,
+  WardAnalytics,
+  RecurrenceAlert,
+  GraphResponse,
+  Department,
+  Ward
+} from '../types';
+
+export const MOCK_DEPARTMENTS: Department[] = [
+  {
+    id: 1,
+    name: "Water Supply & Sewerage Board",
+    code: "WATER_DEPT",
+    description: "Responsible for bulk water distribution, pipeline maintenance, tap water quality and pressure.",
+    contact_email: "water.support@citycivic.gov.in",
+    phone: "080-22945100",
+    head_officer: "Er. Rajeshwar Rao (Chief Engineer)",
+    sla_hours: 24,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 2,
+    name: "Public Works Department (Roads & Infrastructure)",
+    code: "PWD_DEPT",
+    description: "Responsible for arterial roads, pothole repairs, bridges, footpaths and road resurfacing.",
+    contact_email: "pwd.civic@citycivic.gov.in",
+    phone: "080-22945200",
+    head_officer: "Er. S. Meenakshi (Superintending Engineer)",
+    sla_hours: 48,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 3,
+    name: "Electricity Supply & Street Lighting",
+    code: "ELEC_DEPT",
+    description: "Responsible for street light maintenance, distribution transformers, voltage stability and power safety.",
+    contact_email: "power.grievance@citycivic.gov.in",
+    phone: "080-22945300",
+    head_officer: "Er. Anand Murthy (Executive Engineer)",
+    sla_hours: 12,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 4,
+    name: "Solid Waste Management & Sanitation",
+    code: "SANIT_DEPT",
+    description: "Responsible for daily door-to-door waste collection, street sweeping, garbage dumping blackspots and composting.",
+    contact_email: "sanitation@citycivic.gov.in",
+    phone: "080-22945400",
+    head_officer: "Dr. Vandana Patil (Joint Commissioner SWM)",
+    sla_hours: 24,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 5,
+    name: "Stormwater Drainage Department",
+    code: "DRAIN_DEPT",
+    description: "Responsible for major and minor stormwater drains, silt clearance, culverts and overflow prevention.",
+    contact_email: "drainage.help@citycivic.gov.in",
+    phone: "080-22945500",
+    head_officer: "Er. Mohammed Farooq (Zonal Executive)",
+    sla_hours: 36,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: 6,
+    name: "Public Safety & City Vigilance",
+    code: "SAFETY_DEPT",
+    description: "Responsible for public safety hazards, stray animal control, encroachment monitoring and night surveillance coordination.",
+    contact_email: "safety.grievance@citycivic.gov.in",
+    phone: "080-22945600",
+    head_officer: "Inspector K. Vijayalakshmi",
+    sla_hours: 24,
+    created_at: new Date().toISOString()
+  }
+];
+
+export const MOCK_WARDS: Ward[] = [
+  { id: 1, ward_number: 101, name: "Koramangala Ward", zone: "South Zone", center_lat: 12.9352, center_lng: 77.6245, created_at: new Date().toISOString() },
+  { id: 2, ward_number: 102, name: "Indiranagar Ward", zone: "East Zone", center_lat: 12.9784, center_lng: 77.6408, created_at: new Date().toISOString() },
+  { id: 3, ward_number: 103, name: "Jayanagar Ward", zone: "South Zone", center_lat: 12.9308, center_lng: 77.5838, created_at: new Date().toISOString() },
+  { id: 4, ward_number: 104, name: "Malleshwaram Ward", zone: "West Zone", center_lat: 13.0031, center_lng: 77.5643, created_at: new Date().toISOString() },
+  { id: 5, ward_number: 105, name: "Whitefield Ward", zone: "Mahadevapura Zone", center_lat: 12.9698, center_lng: 77.7500, created_at: new Date().toISOString() }
+];
+
+export const MOCK_COMPLAINTS: ComplaintDetail[] = [
+  {
+    id: 1,
+    complaint_code: "JS-2026-0001",
+    title: "Low water pressure in 4th block",
+    description: "There is no proper water supply in our locality since yesterday morning. Pipeline pressure is critically low.",
+    original_language: "en",
+    category: "Water Supply",
+    locality: "Koramangala 4th Block",
+    ward_id: 1,
+    ward_name: "Koramangala Ward",
+    ward_number: 101,
+    latitude: 12.9352,
+    longitude: 77.6245,
+    status: "Submitted",
+    citizen_name: "Ramesh Sharma",
+    citizen_phone: "9876543210",
+    assigned_department_id: 1,
+    assigned_department_name: "Water Supply & Sewerage Board",
+    recommended_department_id: 1,
+    recommended_department_name: "Water Supply & Sewerage Board",
+    routing_reason: "Standard municipal jurisdiction: bulk water distribution and pipelines mapped to Water Board.",
+    incident_id: 1,
+    incident_code: "INC-2026-0001",
+    ai_processing_mode: "multilingual_semantic_lexical (Civic Multilingual Engine)",
+    is_demo_data: true,
+    created_at: new Date(Date.now() - 3600000 * 24).toISOString(),
+    updated_at: new Date().toISOString(),
+    related_complaints: [
+      {
+        id: 2,
+        complaint_code: "JS-2026-0002",
+        title: "ನೀರು ಸರಬರಾಜು ಸಮಸ್ಯೆ",
+        description: "ನಮ್ಮ ಪ್ರದೇಶದಲ್ಲಿ ನೀರು ಸರಿಯಾಗಿ ಬರುತ್ತಿಲ್ಲ, ದಯವಿಟ್ಟು ಪರಿಶೀಲಿಸಿ.",
+        original_language: "kn",
+        category: "Water Supply",
+        locality: "Koramangala 4th Block",
+        similarity_score: 0.88,
+        matching_status: "High Confidence Match",
+        matching_explanation: "Cross-lingual semantic match (0.88) with shared civic concept in Water Supply."
+      },
+      {
+        id: 3,
+        complaint_code: "JS-2026-0003",
+        title: "पानी की गंभीर समस्या",
+        description: "हमारे इलाके में पानी की सप्लाई नहीं हो रही है, बहुत परेशानी है।",
+        original_language: "hi",
+        category: "Water Supply",
+        locality: "Koramangala 4th Block",
+        similarity_score: 0.92,
+        matching_status: "High Confidence Match",
+        matching_explanation: "Cross-lingual semantic match (0.92) with shared civic concept in Water Supply."
+      }
+    ],
+    actions: [],
+    evidence: [],
+    audit_logs: [
+      {
+        id: 1,
+        action_type: "Submitted",
+        performed_by: "Citizen Portal",
+        notes: "Grievance registered via citizen portal in EN.",
+        created_at: new Date(Date.now() - 3600000 * 24).toISOString()
+      }
+    ]
+  },
+  {
+    id: 2,
+    complaint_code: "JS-2026-0002",
+    title: "ನೀರು ಸರಬರಾಜು ಸಮಸ್ಯೆ",
+    description: "ನಮ್ಮ ಪ್ರದೇಶದಲ್ಲಿ ನೀರು ಸರಿಯಾಗಿ ಬರುತ್ತಿಲ್ಲ, ದಯವಿಟ್ಟು ಪರಿಶೀಲಿಸಿ.",
+    original_language: "kn",
+    category: "Water Supply",
+    locality: "Koramangala 4th Block",
+    ward_id: 1,
+    ward_name: "Koramangala Ward",
+    ward_number: 101,
+    latitude: 12.9355,
+    longitude: 77.6250,
+    status: "Submitted",
+    citizen_name: "ಸುರೇಶ್ ಗೌಡ",
+    citizen_phone: "9876543211",
+    recommended_department_id: 1,
+    recommended_department_name: "Water Supply & Sewerage Board",
+    routing_reason: "Standard municipal jurisdiction: bulk water distribution and pipelines mapped to Water Board.",
+    incident_id: 1,
+    incident_code: "INC-2026-0001",
+    ai_processing_mode: "multilingual_semantic_lexical (Civic Multilingual Engine)",
+    is_demo_data: true,
+    created_at: new Date(Date.now() - 3600000 * 20).toISOString(),
+    updated_at: new Date().toISOString(),
+    related_complaints: [],
+    actions: [],
+    evidence: [],
+    audit_logs: []
+  },
+  {
+    id: 3,
+    complaint_code: "JS-2026-0003",
+    title: "पानी की गंभीर समस्या",
+    description: "हमारे इलाके में पानी की सप्लाई नहीं हो रही है, बहुत परेशानी है।",
+    original_language: "hi",
+    category: "Water Supply",
+    locality: "Koramangala 4th Block",
+    ward_id: 1,
+    ward_name: "Koramangala Ward",
+    ward_number: 101,
+    latitude: 12.9360,
+    longitude: 77.6240,
+    status: "Submitted",
+    citizen_name: "अमित कुमार",
+    citizen_phone: "9876543212",
+    recommended_department_id: 1,
+    recommended_department_name: "Water Supply & Sewerage Board",
+    routing_reason: "Standard municipal jurisdiction: bulk water distribution and pipelines mapped to Water Board.",
+    incident_id: 1,
+    incident_code: "INC-2026-0001",
+    ai_processing_mode: "multilingual_semantic_lexical (Civic Multilingual Engine)",
+    is_demo_data: true,
+    created_at: new Date(Date.now() - 3600000 * 18).toISOString(),
+    updated_at: new Date().toISOString(),
+    related_complaints: [],
+    actions: [],
+    evidence: [],
+    audit_logs: []
+  },
+  {
+    id: 4,
+    complaint_code: "JS-2026-0004",
+    title: "Large pothole on 100ft road",
+    description: "Dangerous deep pothole near junction causing serious two-wheeler accidents.",
+    original_language: "en",
+    category: "Roads",
+    locality: "100 Feet Road, Indiranagar",
+    ward_id: 2,
+    ward_name: "Indiranagar Ward",
+    ward_number: 102,
+    latitude: 12.9784,
+    longitude: 77.6408,
+    status: "Action Taken",
+    citizen_name: "Priya Nair",
+    citizen_phone: "9876543213",
+    assigned_department_id: 2,
+    assigned_department_name: "Public Works Department (Roads & Infrastructure)",
+    recommended_department_id: 2,
+    recommended_department_name: "Public Works Department (Roads & Infrastructure)",
+    routing_reason: "Road resurfacing, pothole filling and asphalt repairs under PWD.",
+    incident_id: 2,
+    incident_code: "INC-2026-0002",
+    ai_processing_mode: "multilingual_semantic_lexical (Civic Multilingual Engine)",
+    is_demo_data: true,
+    created_at: new Date(Date.now() - 3600000 * 48).toISOString(),
+    updated_at: new Date().toISOString(),
+    related_complaints: [],
+    actions: [
+      {
+        id: 1,
+        officer_name: "Er. S. Meenakshi",
+        officer_id: "OFF-PWD-8402",
+        action_type: "Cold Mix Asphalt Patching",
+        action_description: "Cavity cleaned, primed with emulsion, and filled with cold asphalt mix.",
+        action_date: new Date(Date.now() - 3600000 * 12).toISOString(),
+        status_after: "Action Taken",
+        department_name: "Public Works Department",
+        evidence_url: "https://images.unsplash.com/photo-1541888946425-d0fbb18086f6?auto=format&fit=crop&w=800&q=80"
+      }
+    ],
+    evidence: [],
+    audit_logs: []
+  },
+  {
+    id: 5,
+    complaint_code: "JS-2026-0005",
+    title: "Recurrence: Asphalt sinking again on 100ft road",
+    description: "The repaired pothole has sunk again after light rain on 100 Feet Road. Traffic hazard.",
+    original_language: "en",
+    category: "Roads",
+    locality: "100 Feet Road, Indiranagar",
+    ward_id: 2,
+    ward_name: "Indiranagar Ward",
+    ward_number: 102,
+    latitude: 12.9785,
+    longitude: 77.6410,
+    status: "Under Review",
+    citizen_name: "Karan Verma",
+    citizen_phone: "9876543214",
+    assigned_department_id: 2,
+    assigned_department_name: "Public Works Department",
+    recommended_department_id: 2,
+    recommended_department_name: "Public Works Department",
+    routing_reason: "Road resurfacing and pothole repairs under PWD.",
+    incident_id: 2,
+    incident_code: "INC-2026-0002",
+    ai_processing_mode: "multilingual_semantic_lexical (Civic Multilingual Engine)",
+    is_demo_data: true,
+    created_at: new Date(Date.now() - 3600000 * 2).toISOString(),
+    updated_at: new Date().toISOString(),
+    related_complaints: [],
+    actions: [],
+    evidence: [],
+    audit_logs: []
+  }
+];
+
+export const MOCK_RECURRENCE_ALERTS: RecurrenceAlert[] = [
+  {
+    id: 5,
+    incident_id: 2,
+    incident_code: "INC-2026-0002",
+    incident_title: "Dangerous Pothole Cluster on 100ft Road Indiranagar",
+    category: "Roads",
+    locality: "100 Feet Road, Indiranagar",
+    ward_name: "Indiranagar Ward",
+    latest_complaint_code: "JS-2026-0005",
+    latest_complaint_title: "Recurrence: Asphalt sinking again on 100ft road",
+    latest_complaint_date: new Date(Date.now() - 3600000 * 2).toISOString(),
+    previous_action_description: "Cavity cleaned, primed with emulsion, and filled with cold asphalt mix.",
+    previous_action_date: new Date(Date.now() - 3600000 * 12).toISOString(),
+    previous_officer: "Er. S. Meenakshi",
+    department_name: "Public Works Department",
+    related_complaints_count: 2,
+    alert_message: "Potential Recurrence Detected: A similar grievance was logged after an action was recorded. Please review previous field work."
+  }
+];
+
+export const MOCK_GRAPH: GraphResponse = {
+  nodes: [
+    { id: "comp_1", type: "complaint", data: { label: "JS-2026-0001", code: "JS-2026-0001", nodeType: "complaint", details: "Low water pressure in 4th block", status: "Submitted", language: "en", category: "Water Supply", locality: "Koramangala 4th Block" }, position: { x: 50, y: 100 } },
+    { id: "comp_2", type: "complaint", data: { label: "JS-2026-0002", code: "JS-2026-0002", nodeType: "complaint", details: "ನೀರು ಸರಬರಾಜು ಸಮಸ್ಯೆ", status: "Submitted", language: "kn", category: "Water Supply", locality: "Koramangala 4th Block" }, position: { x: 50, y: 200 } },
+    { id: "comp_3", type: "complaint", data: { label: "JS-2026-0003", code: "JS-2026-0003", nodeType: "complaint", details: "पानी की समस्या", status: "Submitted", language: "hi", category: "Water Supply", locality: "Koramangala 4th Block" }, position: { x: 50, y: 300 } },
+    { id: "inc_1", type: "incident", data: { label: "INC-2026-0001", code: "INC-2026-0001", nodeType: "incident", details: "Pipeline Pressure Loss in Koramangala", status: "Investigating", category: "Water Supply", locality: "Koramangala 4th Block" }, position: { x: 320, y: 200 } },
+    { id: "loc_1", type: "locality", data: { label: "Koramangala 4th Block", code: "LOC-KOR-01", nodeType: "locality", details: "Koramangala Ward 101, South Zone", status: "Active", locality: "Koramangala 4th Block" }, position: { x: 600, y: 140 } },
+    { id: "dept_1", type: "department", data: { label: "Water Board (BWSSB)", code: "WATER_DEPT", nodeType: "department", details: "Water Supply & Sewerage Board", status: "Active" }, position: { x: 600, y: 280 } },
+    { id: "act_1", type: "action", data: { label: "Pressure Calibration", code: "ACT-01", nodeType: "action", details: "Field Inspection by Er. Rajeshwar Rao", status: "Investigating" }, position: { x: 880, y: 200 } }
+  ],
+  edges: [
+    { id: "e1", source: "comp_1", target: "inc_1", label: "SIMILAR_TO", data: { relation: "SIMILAR_TO", confidence: 0.88, verification: "Verified" } },
+    { id: "e2", source: "comp_2", target: "inc_1", label: "SIMILAR_TO", data: { relation: "SIMILAR_TO", confidence: 0.92, verification: "Verified" } },
+    { id: "e3", source: "comp_3", target: "inc_1", label: "SIMILAR_TO", data: { relation: "SIMILAR_TO", confidence: 0.89, verification: "Verified" } },
+    { id: "e4", source: "inc_1", target: "loc_1", label: "LOCATED_IN", data: { relation: "LOCATED_IN", confidence: 1.0, verification: "Verified" } },
+    { id: "e5", source: "inc_1", target: "dept_1", label: "ROUTED_TO", data: { relation: "ROUTED_TO", confidence: 0.95, verification: "Verified" } },
+    { id: "e6", source: "dept_1", target: "act_1", label: "EXECUTED", data: { relation: "EXECUTED", confidence: 1.0, verification: "Verified" } }
+  ],
+  stats: {
+    total_nodes: 7,
+    total_edges: 6,
+    complaint_count: 3,
+    incident_count: 1,
+    action_count: 1
+  }
+};

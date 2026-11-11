@@ -1,0 +1,5 @@
+# Optional heavy neural transformer dependencies
+# Only needed if ENABLE_HEAVY_TRANSFORMER=true on high-memory/GPU instances
+sentence-transformers>=2.5.0
+transformers>=4.38.0
+torch>=2.2.0
