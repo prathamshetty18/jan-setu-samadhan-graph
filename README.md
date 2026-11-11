@@ -8,6 +8,7 @@
 ![AI Engine](https://img.shields.io/badge/AI%2FNLP-Multilingual%20Embeddings%20%28EN%2FHI%2FKN%29-315B8A)
 ![Graph](https://img.shields.io/badge/Graph-NetworkX%20%2B%20React%20Flow-D97706)
 ![Database](https://img.shields.io/badge/Database-PostgreSQL%20%2B%20PostGIS%20%7C%20SQLite-4169E1)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fprathamshetty18%2Fjan-setu-samadhan-graph&root-directory=frontend)
 
 ---
 
