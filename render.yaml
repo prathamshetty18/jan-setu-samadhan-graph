@@ -1,0 +1,44 @@
+services:
+  # ----------------------------------------------------------------------------
+  # 1. Jan Setu — Backend Web Service (FastAPI)
+  # ----------------------------------------------------------------------------
+  - type: web
+    name: jan-setu-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: AUTO_SEED_DEMO_DATA
+        value: "true"
+      - key: EMBEDDING_MODEL
+        value: paraphrase-multilingual-MiniLM-L12-v2
+      - key: COSINE_SIMILARITY_THRESHOLD
+        value: "0.75"
+      - key: ENABLE_HEAVY_TRANSFORMER
+        value: "false"
+      # Paste your Supabase PostgreSQL connection string in the Render Dashboard
+      - key: DATABASE_URL
+        sync: false
+
+  # ----------------------------------------------------------------------------
+  # 2. Jan Setu — Frontend Static Site (React 19 + Vite)
+  # ----------------------------------------------------------------------------
+  - type: web
+    name: jan-setu-frontend
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install --legacy-peer-deps && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        sync: false
